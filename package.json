@@ -1,0 +1,1 @@
+{"name": "background-remover", "version": "1.0.0", "description": "AI 智能抠图工具 - 一键去除图片背景", "main": "server.js", "scripts": {"start": "node server.js", "dev": "node server.js"}, "keywords": ["background-remover", "rembg", "ai"], "author": "", "license": "MIT", "dependencies": {"cors": "^2.8.6", "express": "^5.2.1", "multer": "^2.1.1", "rembg": "^1.0.6"}}
