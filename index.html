@@ -188,7 +188,7 @@
   <div style="margin-bottom: 16px;">
     <div style="font-weight: 600; font-size: 1rem; margin-bottom: 10px;">选择抠图服务提供商</div>
     <div class="provider-tabs">
-      <div class="provider-tab tab-clipdrop active" data-provider="clipdrop">🧪 Clipdrop <span class="badge">推荐 · 全分辨率</span></div>
+      <div class="provider-tab tab-fapihub active" data-provider="fapihub">⚡ FAPIhub <span class="badge">推荐 · 全分辨率</span></div>
       <div class="provider-tab tab-removebg" data-provider="removebg">🖼️ Remove.bg <span class="badge">预览级</span></div>
     </div>
   </div>
@@ -262,17 +262,17 @@
     <div class="feature">
       <div class="feature-icon"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
       <h3>多引擎可选</h3>
-      <p>内置 Clipdrop 和 remove.bg 双引擎，可自由切换，找到最适合你的画质方案</p>
+      <p>内置 FAPIhub 和 remove.bg 双引擎，可自由切换，找到最适合你的画质方案</p>
     </div>
     <div class="feature">
       <div class="feature-icon"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/></svg></div>
       <h3>全分辨率输出</h3>
-      <p>Clipdrop 免费版即提供全分辨率输出，不再有 625x625 的画质压缩限制</p>
+      <p>FAPIhub 免费版即提供全分辨率输出，不再有 625x625 的画质压缩限制</p>
     </div>
     <div class="feature">
       <div class="feature-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
       <h3>免费额度充足</h3>
-      <p>Clipdrop 每月 100 张免费额度，remove.bg 每月 50 张，日常使用完全够用</p>
+      <p>FAPIhub 每月 100 张免费额度，remove.bg 每月 50 张，日常使用完全够用</p>
     </div>
   </section>
 
@@ -280,7 +280,7 @@
 
 <!-- Footer -->
 <footer class="footer">
-  Powered by <a href="https://clipdrop.co/remove-background" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;">Clipdrop</a> / <a href="https://www.remove.bg/" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;">remove.bg</a> API
+  Powered by <a href="https://fapihub.com" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;">FAPIhub</a> / <a href="https://www.remove.bg/" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;">remove.bg</a> API
 </footer>
 
 <!-- Toast -->
@@ -289,18 +289,19 @@
 <script>
 // ========== Provider Config ==========
 const PROVIDERS = {
-  clipdrop: {
-    name: 'Clipdrop',
-    icon: '🧪',
-    endpoint: 'https://api.clipdrop.co/remove-background',
-    keyHeader: 'x-api-key',
+  fapihub: {
+    name: 'FAPIhub',
+    icon: '⚡',
+    endpoint: 'https://fapihub.com/v2/rembg/',
+    keyHeader: 'ApiKey',
     freeQuota: '100 张/月',
     resolution: '<strong>全分辨率</strong> — 无画质降级',
     maxSize: 20 * 1024 * 1024,
-    getKeyUrl: 'https://clipdrop.co/account/api-keys',
+    getKeyUrl: 'https://fapihub.com/register/',
     method: 'POST',
     responseType: 'blob',
     formatHint: '支持 JPG / PNG / WebP / BMP，最大 20MB（全分辨率输出）',
+    fieldName: 'image',
   },
   removebg: {
     name: 'Remove.bg',
@@ -317,7 +318,7 @@ const PROVIDERS = {
   },
 };
 
-let currentProvider = localStorage.getItem('bg_provider') || 'clipdrop';
+let currentProvider = localStorage.getItem('bg_provider') || 'fapihub';
 const apiKeys = JSON.parse(localStorage.getItem('bg_api_keys') || '{}');
 
 // ========== DOM ==========
@@ -409,8 +410,8 @@ function showConfigPanel() {
     <div style="margin-bottom: 16px;">
       <div style="font-weight: 600; font-size: 1rem; margin-bottom: 10px;">选择抠图服务提供商</div>
       <div class="provider-tabs">
-        <div class="provider-tab tab-clipdrop ${currentProvider === 'clipdrop' ? 'active' : ''}" data-provider="clipdrop" onclick="switchProvider('clipdrop')">🧪 Clipdrop <span class="badge">推荐 · 全分辨率</span></div>
-        <div class="provider-tab tab-removebg ${currentProvider === 'removebg' ? 'active' : ''}" data-provider="removebg" onclick="switchProvider('removebg')">🖼️ Remove.bg <span class="badge">预览级</span></div>
+    <div class="provider-tab tab-fapihub ${currentProvider === 'fapihub' ? 'active' : ''}" data-provider="fapihub" onclick="switchProvider('fapihub')">⚡ FAPIhub <span class="badge">推荐 · 全分辨率</span></div>
+    <div class="provider-tab tab-removebg ${currentProvider === 'removebg' ? 'active' : ''}" data-provider="removebg" onclick="switchProvider('removebg')">🖼️ Remove.bg <span class="badge">预览级</span></div>
       </div>
     </div>
     <div class="key-row">
@@ -487,8 +488,9 @@ processBtn.addEventListener('click', async () => {
 
   try {
     let body;
-    if (currentProvider === 'clipdrop') {
-      body = selectedFile;
+    if (currentProvider === 'fapihub') {
+      body = new FormData();
+      body.append('image', selectedFile);
     } else {
       body = new FormData();
       body.append('image_file', selectedFile);
